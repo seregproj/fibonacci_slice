@@ -1,0 +1,32 @@
+version: "3"
+
+networks:
+  cache:
+    driver: bridge
+
+services:
+  fibonacci:
+    restart: on-failure
+    build:
+      context: ./
+      dockerfile: ./cmd/Dockerfile
+    ports:
+      - "8888:8080"
+      - "8889:8081"
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - ./logs:/var/log
+    networks:
+      - cache
+
+  redis:
+    container_name: "redis"
+    image: redis:alpine
+    command: redis-server /usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+    volumes:
+      - $PWD/configs/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - cache

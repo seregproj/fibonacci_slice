@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  fibonacci_tests:
+    restart: on-failure
+    build:
+      context: ./
+      dockerfile: ./cmd/Dockerfile
+    environment:
+      - STORAGE_TYPE=memory
+    volumes:
+      - ./logs:/var/log
+    ports:
+      - "9010:8080"
+      - "9011:8081"

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package main;
+
+option go_package = "api/proto";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service FibonacciService {
+  rpc GetSlice(GetSliceRequest) returns (GetSliceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/calc/fib/slice",
+      body: "*"
+    };
+  }
+}
+
+message GetSliceRequest {
+  uint64 x = 1 [(validate.rules).uint64.gte = 0];
+  uint64 y = 2 [(validate.rules).uint64.gte = 0];
+}
+
+message GetSliceResponse {
+  repeated uint64 items = 1;
+}
